@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/python-3.11%2B-1F1E1D?style=flat-square&labelColor=F0EEE6&color=5E6B7A" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/install-uv%20sync-D97757?style=flat-square&labelColor=F0EEE6" alt="uv">
   <img src="https://img.shields.io/badge/notebooks-5%2C%20all%20executed%20live-7D8B6A?style=flat-square&labelColor=F0EEE6" alt="notebooks">
-  <img src="https://img.shields.io/badge/deck-42%20slides%20%2B%20speaker%20notes-BD5D3A?style=flat-square&labelColor=F0EEE6" alt="deck">
+  <img src="https://img.shields.io/badge/deck-48%20slides%20%2B%20speaker%20notes-BD5D3A?style=flat-square&labelColor=F0EEE6" alt="deck">
   <img src="https://img.shields.io/badge/license-MIT-8A8780?style=flat-square&labelColor=F0EEE6" alt="MIT">
 </p>
 
@@ -16,7 +16,7 @@
 
 LLMs write prose for people. Your code needs a category, a score, a probability it can branch on. Jev takes a *state* (any text or JSON) plus typed *questions* and returns typed answers with **calibrated probabilities**, in ~100 ms, at **$0.042 per million input tokens** (output is free). No prompt-engineering for output format. No JSON parsing. No retries on malformed replies.
 
-This repo is everything you need to **learn it or teach it**: five Jupyter notebooks that run against the live API, a 42-slide presentation with speaker notes on every slide, and a 15,000-word cited reference distilled from the entire official documentation. **Every number in all three was verified against the real API** while building this.
+This repo is everything you need to **learn it or teach it**: five Jupyter notebooks that run against the live API, a 48-slide presentation with speaker notes on every slide, and a 15,000-word cited reference distilled from the entire official documentation. **Every number in all three was verified against the real API** while building this.
 
 ---
 
@@ -71,7 +71,7 @@ That is the whole setup. The notebooks find the key from the environment or any 
 
 ### The deck (`deck/Jev-Workshop.pptx`)
 
-42 slides, fully editable, speaker notes on every slide with facilitation tips (where to poll the room, which wrong answers to expect). Built as a story: a support ticket arrives at 9:04 am, and by the closing slide the room can triage 500 of them for a cent.
+48 slides, fully editable, speaker notes on every slide with facilitation tips (where to poll the room, which wrong answers to expect). Built as a story: a support ticket arrives at 9:04 am, and by the closing slide the room can triage 500 of them for a cent.
 
 <p align="center">
   <img src="docs/images/slides-preview.png" alt="Six slides from the deck" width="100%">

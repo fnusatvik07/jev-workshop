@@ -380,6 +380,134 @@ d.bullets(s, [
 d.notes(s, "This is the slide to slow down on. Calibration is WHY thresholds in the rest of the workshop mean anything. "
            "Exercise 3 in notebook 03 shows how to test calibration on your own labeled data.")
 
+# ---------------------------------------------------------------- 8b under the hood: transformer
+s = d.slide(FOOT)
+d.kicker(s, "Under the hood  |  1 of 5")
+d.title(s, "The machine itself: a transformer, in one slide")
+d.bullets(s, [
+    ("Tokens to vectors. ", "Text is split into tokens (word pieces); each becomes a vector of numbers (an embedding). From here on, everything is matrix math."),
+    ("A stack of attention blocks. ", "Each layer does two things: attention (every token looks at every other token and decides what matters to it) and an MLP (per-token transformation). Dozens of layers deep."),
+    ("The parameters ", "are the matrices inside those blocks: the 'billions of knobs' from the foundations section. They are what training changes; the architecture never changes at inference time."),
+    ("Backprop in one sentence. ", "Run forward, compute a loss (a single number for 'how wrong'), then the chain rule walks backward through every layer assigning blame to every knob, and the optimizer (Adam) nudges each one. Same machinery for EVERY recipe on the next slides; only the loss differs."),
+], x=0.55, y=1.8, w=7.1, size=14.5, gap=12)
+for i, (label, body) in enumerate([
+    ("tokens", "“My card was\ncharged twice”"),
+    ("embeddings", "vectors, one\nper token"),
+    ("N x blocks", "attention + MLP,\nrepeated"),
+    ("output head", "what comes out\n(next slides)"),
+]):
+    y = 1.85 + i * 1.22
+    fill, tc = (INK, CREAM) if label == "N x blocks" else (PAPER, INK)
+    d.rect(s, 8.15, y, 4.5, 1.02, fill=fill, line=LINE if fill == PAPER else None)
+    d.text(s, label, x=8.4, y=y + 0.1, w=1.9, h=0.4, size=13, bold=True, color=tc)
+    d.text(s, body, x=10.3, y=y + 0.12, w=2.25, h=0.85, size=10.5,
+           color=SLATE if fill == PAPER else RGBColor(0xCF, 0xCB, 0xC2), line_spacing=1.1)
+    if i < 3:
+        d.rect(s, 10.35, y + 1.04, 0.06, 0.18, fill=CORAL, line=None, round_=False)
+d.notes(s, "This section exists for the 'how does it REALLY work' crowd; it can be skipped for non-technical rooms. "
+           "Pitch at the whiteboard level: embeddings, attention as 'every token votes on what to look at', MLPs, and backprop as blame assignment via the chain rule. "
+           "The punchline to set up now: every recipe that follows (pretraining, RLHF, RLVR, RLCD) uses this exact machine and this exact backprop; "
+           "the entire difference lives in the output head and the loss function.")
+
+# ---------------------------------------------------------------- 8c under the hood: decode loop
+s = d.slide(FOOT)
+d.kicker(s, "Under the hood  |  2 of 5")
+d.title(s, "Why LLMs are slow: generation is a serial loop")
+d.bullets(s, [
+    ("One forward pass per output token. ", "An LLM produces text by predicting one token, appending it, and running again. A 500-token answer is 500 sequential passes. The KV cache saves recomputation, not serialism."),
+    ("Thinking costs tokens. ", "Reasoning models get their quality from long chains of thought, which are generated text: more output tokens, more serial passes, more seconds, more dollars."),
+    ("So output is the expensive axis. ", "For LLMs, latency and cost scale with how much the model SAYS. That is the axis Jev deletes."),
+], x=0.55, y=1.8, w=6.6, size=15, gap=13)
+d.code(s, 'context = prompt\nwhile not done:          # SERIAL: cannot parallelize\n    logits = model(context)   # full forward pass\n    token  = sample(logits)   # ONE token\n    context += token          # and again...\n\n# 500-token answer = 500 passes\n# "thinking" = even more passes before the answer',
+       x=7.5, y=1.85, w=5.3, h=2.9, title="the autoregressive decode loop")
+d.text(s, [[("Contrast, next slides: ", {"bold": True, "color": CLAY}),
+            ("a decision does not need to be SAID one token at a time. It can be read off in a single evaluation.", {})]],
+       x=7.5, y=5.1, w=5.3, h=0.9, size=14, line_spacing=1.2)
+d.notes(s, "The decode loop is the single most important piece of systems intuition in this section. "
+           "Every token costs a full trip through the network, and tokens are emitted strictly one after another. "
+           "Speculative decoding and batching help throughput, not the fundamental serial dependency per stream. "
+           "Reasoning quality bought with thinking tokens is quality bought with wall-clock and money.")
+
+# ---------------------------------------------------------------- 8d under the hood: RLHF engineering
+s = d.slide(FOOT)
+d.kicker(s, "Under the hood  |  3 of 5")
+d.title(s, "RLHF at the engineering level")
+rows = [
+    ["Piece", "What it is", "The loss / signal"],
+    ["Reward model", "the same transformer with a scalar output head: text in, one 'how much will a human like this' number out", "pairwise loss on human A/B picks (Bradley-Terry): score the preferred answer higher"],
+    ["Policy (the chatbot)", "the model being trained; it generates full answers (rollouts) during training", "maximize reward-model score via policy gradients (PPO)"],
+    ["KL penalty", "a tether to the original reference model", "punishes drifting too far, so the policy cannot collapse into reward-hacking gibberish"],
+]
+d.table(s, rows, x=0.55, y=1.75, w=12.2, col_widths=[2.0, 5.3, 4.9], row_h=0.92, size=12.5)
+d.text(s, [[("Note what the gradient pushes toward: ", {"bold": True}),
+            ("whatever the reward model scores highly. The reward model learned human taste, so the gradient literally optimizes "
+             "'sound good to people'. Truthfulness only matters where the taste model happens to notice. Same backprop as pretraining; "
+             "the loss is the only thing that changed, and the loss is approval.", {})]],
+       x=0.55, y=5.5, w=12.2, h=1.1, size=14, line_spacing=1.25)
+d.notes(s, "For a sharp audience, add: the policy update is PPO with clipped objectives; rollouts are expensive because each one is a full "
+           "autoregressive generation; and the KL term is why chat models feel 'pulled' toward their base style. "
+           "The teaching point stays simple: reward = predicted human approval, so every failure mode of approval (confidence theater, sycophancy) "
+           "gets optimized IN.")
+
+# ---------------------------------------------------------------- 8e under the hood: RLCD engineering
+s = d.slide(FOOT)
+d.kicker(s, "Under the hood  |  4 of 5")
+d.title(s, "RLCD at the engineering level: different head, different loss")
+d.bullets(s, [
+    ("Documented by TypeSafe: ", "Jev never decodes text. It returns probability distributions over the options YOU supplied, ingests the state once, and evaluates every question in parallel. Trained with RLCD so the probabilities are calibrated."),
+    ("The standard engineering for that contract: ", "replace the next-token head with scoring over the supplied answer space: each option or level gets a score, softmax turns scores into the distribution you receive. No decode loop exists."),
+    ("The loss is a proper scoring rule ", "(think log loss or Brier) against what ACTUALLY happened: probability quality is not a side effect, it IS the training objective. Backprop and the transformer underneath are unchanged."),
+    ("Honest labeling: ", "TypeSafe has not published Jev's internals. 'Documented' above is from their docs and primer; 'standard engineering' is how this model class is built, flagged as inference."),
+], x=0.55, y=1.8, w=7.0, size=14, gap=12)
+d.rect(s, 7.95, 1.8, 4.85, 4.5, fill=PAPER, line=LINE)
+d.text(s, "LLM head vs decision head", x=8.2, y=2.0, w=4.4, h=0.35, size=14, bold=True, font=SERIF)
+d.text(s, "LLM:  state -> [transformer] ->\n  logits over 50,000 vocabulary\n  tokens -> decode loop,\n  token by token\n\nJev:  state + your options ->\n  [transformer] -> scores over\n  YOUR 3 options -> softmax ->\n  done. One evaluation,\n  a handful of numbers out.",
+       x=8.2, y=2.5, w=4.4, h=2.7, size=11.5, font="Menlo", color=INK, line_spacing=1.2)
+d.text(s, "The answer space shrinks from 'all possible text' to 'the options you supplied'. That is where the speed, the price, and the impossibility of malformed output all come from.",
+       x=8.2, y=5.35, w=4.4, h=0.9, size=11, color=SLATE, italic=True, line_spacing=1.12)
+d.notes(s, "The one-slide answer to 'how is backpropagation different': it is NOT. Same transformer, same chain rule, same Adam. "
+           "What differs is the output head (score the supplied options instead of 50k vocabulary logits) and the loss "
+           "(proper scoring rule against outcomes instead of next-token cross-entropy or human approval). "
+           "Be scrupulous about the honesty bullet: internals are unpublished; we teach the documented contract plus standard practice for the class, labeled as such.")
+
+# ---------------------------------------------------------------- 8f under the hood: proper scoring + speed
+s = d.slide(FOOT)
+d.kicker(s, "Under the hood  |  5 of 5")
+d.title(s, "Why honesty wins, and why it comes back in 100 ms")
+d.image(s, f"{ASSETS}/proper_scoring.png", x=0.55, y=1.8, w=5.9)
+d.text(s, "If an event truly happens 80% of the time, expected loss is minimized ONLY by reporting 0.8. Overclaiming 0.99 costs more. Calibration is the minimum of the objective, not a bolt-on.",
+       x=0.55, y=5.9, w=5.9, h=0.8, size=12, color=SLATE, italic=True, line_spacing=1.15)
+d.bullets(s, [
+    ("No decode loop. ", "The judgment happens inside the forward evaluation; there is nothing to emit token by token."),
+    ("Tiny output. ", "A few numbers per question instead of hundreds of tokens. This is why output is literally free: there is almost no decode phase to bill."),
+    ("One state, N questions in parallel. ", "The state is ingested once; every question is evaluated against it simultaneously (documented). An extra question adds tokens, not a round trip."),
+    ("The bill follows the architecture. ", "LLM cost scales with what it says; Jev cost scales with what it reads. 500 serial passes vs roughly one evaluation is the whole latency story."),
+], x=6.85, y=1.9, w=6.0, size=13.5, gap=11)
+d.notes(s, "Left: the mathematical reason calibration emerges, with two truths plotted; the dot is the minimum. "
+           "Right: the systems reason for the speed and the free output tokens. Close the section by connecting back: "
+           "the decode loop slide showed where LLM latency lives; Jev's contract deletes that axis entirely, "
+           "and the pricing page (output free) is the commercial shadow of that architecture choice.")
+
+# ---------------------------------------------------------------- 8g under the hood: recap table
+s = d.slide(FOOT)
+d.kicker(s, "Under the hood  |  Recap")
+d.title(s, "One machine, four objectives")
+rows = [
+    ["", "Pretraining", "RLHF", "RLVR", "RLCD (Jev)"],
+    ["Training data", "internet text", "human A/B preferences", "checkable problems", "questions with known outcomes"],
+    ["Loss / reward", "next-token cross-entropy", "reward model score + KL tether", "did the answer verify?", "proper scoring rule on outcomes"],
+    ["Gradient pushes toward", "plausible continuation", "human approval", "correct final answers", "honest probabilities"],
+    ["Output at inference", "text", "text", "text + chains of thought", "distributions over your options"],
+    ["Characteristic failure", "aimless", "confident hallucination, sycophancy", "slow and expensive", "wrong but honestly uncertain"],
+]
+d.table(s, rows, x=0.55, y=1.75, w=12.2, col_widths=[2.2, 2.4, 2.7, 2.3, 2.6], row_h=0.78, size=12)
+d.text(s, "Same transformer. Same backpropagation. The loss function is the product decision.",
+       x=0.55, y=6.6, w=12.2, h=0.4, size=13.5, color=CLAY, italic=True)
+d.notes(s, "The recap students photograph. If one sentence survives the section, make it the italic one at the bottom: "
+           "the four model families on this table differ by objective, not machinery. "
+           "That also explains why Jev cannot write prose (nothing in its loop ever rewarded prose) and why an RLHF chatbot "
+           "cannot give you calibrated probabilities (nothing in its loop ever rewarded them).")
+
 # ---------------------------------------------------------------- 9 anatomy
 s = d.slide(FOOT)
 d.kicker(s, "Part 2  |  The API")

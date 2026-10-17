@@ -149,3 +149,25 @@ ax.tick_params(labelsize=10.5)
 for spine in ["top", "right"]:
     ax.spines[spine].set_visible(False)
 save(fig, "noul_ladder.png")
+
+# 7. Proper scoring rule: honesty is the only minimum ----------------------
+import numpy as np
+fig, ax = plt.subplots(figsize=(5.4, 3.6))
+q = np.linspace(0.01, 0.99, 200)
+for p_true, color, label in [(0.8, CORAL, "truth: happens 80% of the time"),
+                             (0.5, SLATE, "truth: happens 50% of the time")]:
+    exp_loss = p_true * (1 - q) ** 2 + (1 - p_true) * q ** 2   # expected Brier loss
+    ax.plot(q, exp_loss, color=color, lw=2.5, label=label)
+    ax.axvline(p_true, color=color, lw=1.2, ls=":")
+    ax.plot([p_true], [p_true * (1 - p_true)], "o", color=color, ms=7)
+ax.annotate("minimum sits exactly at the\ntrue probability: report 0.99\nwhen truth is 0.8 and you lose",
+            xy=(0.8, 0.16), xytext=(0.33, 0.42), fontsize=9.5, color="#1F1E1D",
+            arrowprops=dict(arrowstyle="->", color="#8A8780"))
+ax.set_xlabel("probability the model reports", fontsize=11)
+ax.set_ylabel("expected training loss (Brier)", fontsize=11)
+ax.set_ylim(0, 0.65)
+ax.legend(fontsize=9, frameon=False, loc="upper right")
+ax.tick_params(labelsize=10)
+for spine in ["top", "right"]:
+    ax.spines[spine].set_visible(False)
+save(fig, "proper_scoring.png")
