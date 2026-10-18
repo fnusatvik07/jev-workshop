@@ -98,6 +98,20 @@ Five small, original, end-to-end projects, each one file you can read on a proje
 
 The through-line: Jev makes the decision, your code owns the action. See [`live-builds/README.md`](live-builds/README.md) for real output and resume lines. Projects 1 (router) needs `OPENAI_API_KEY`.
 
+### Interactive app UIs (`apps/`)
+
+The same nine projects as **runnable UIs inside Jupyter**: type into a box, watch real HTML render (date pickers, sliders, color swatches, relevance-sized emoji, highlighted search, a styled feed, ALLOW/REVIEW/BLOCK badges).
+
+<p align="center">
+  <img src="docs/images/apps-preview.png" alt="The project UIs rendered in Jupyter" width="80%">
+</p>
+
+```bash
+uv run jupyter lab apps/     # open a notebook, Run All, then type into "Try it yourself"
+```
+
+See [`apps/README.md`](apps/README.md). The example cells are pre-run so they show on GitHub; the interactive cells need a live kernel.
+
 ### A gallery of fun, visual demos (`gallery/`)
 
 Run-in-30-seconds use cases that a room can *see*:
