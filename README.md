@@ -94,8 +94,21 @@ Five small, original, end-to-end projects, each one file you can read on a proje
 | 3 | [`content_blocker.py`](live-builds/content_blocker.py) | block web content by meaning, not blocklists; toggleable categories | product / full-stack |
 | 4 | [`shapeshift.py`](live-builds/shapeshift.py) | a UI that builds the right input control from natural language | AI UX / frontend |
 | 5 | [`jev_evals.py`](live-builds/jev_evals.py) | LLM-as-judge cheap enough to grade 100% of traffic and catch hallucinations | AI evals / quality |
+| 6 | [`rag_reranker.py`](live-builds/rag_reranker.py) | re-score retrieved passages so the right one reaches rank 1 | RAG / search |
 
-The through-line: Jev makes the decision, your code owns the action. See [`live-builds/README.md`](live-builds/README.md) for real output and resume lines. Project 1 also needs `OPENAI_API_KEY`.
+The through-line: Jev makes the decision, your code owns the action. See [`live-builds/README.md`](live-builds/README.md) for real output and resume lines. Projects 1 (router) needs `OPENAI_API_KEY`.
+
+### A gallery of fun, visual demos (`gallery/`)
+
+Run-in-30-seconds use cases that a room can *see*:
+
+| File | What it does |
+| --- | --- |
+| [`emoji_picker.py`](gallery/emoji_picker.py) | type a word, the matching emoji group floats to the top |
+| [`color_mood.py`](gallery/color_mood.py) | type a feeling, a blended color materializes in your terminal |
+| [`semantic_find.py`](gallery/semantic_find.py) | semantic Ctrl-F: find a page passage by meaning, answer through chat |
+
+See [`gallery/README.md`](gallery/README.md) for real output. `semantic_find.py` also needs `OPENAI_API_KEY`.
 
 ### The reference (`reference/JEV-REFERENCE.md`)
 

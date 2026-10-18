@@ -20,6 +20,7 @@ uv run python live-builds/model_router.py
 | 3 | `content_blocker.py` | filter by meaning, not blocklists | product / full-stack | semantic content blocker with toggleable categories |
 | 4 | `shapeshift.py` | typed classification drives the UI | AI UX / frontend | adaptive UI that builds the right controls from NL |
 | 5 | `jev_evals.py` | System One as the LLM judge | AI evals / quality | grade 100% of LLM traffic for pennies, catch hallucinations |
+| 6 | `rag_reranker.py` | re-score retrieved passages by relevance | RAG / search | lift retrieval precision, drop junk context before the LLM |
 
 The through-line: **Jev makes the decision, your code owns the action.** The model
 never generates the output you ship; it returns typed, calibrated numbers you
@@ -96,6 +97,19 @@ low-confidence grades are flagged for human review (an eval of the eval).
 A: "...designed by Thomas Edison in 1901."  -> FAIL · hallucination  (faithful 0.02)
 A: "In 1889."  (to 'when AND why')          -> REVISE · incomplete
 2 pass  1 revise  3 fail   ·   ~$0.021 per 1,000 answers graded
+```
+
+## 6. RAG Reranker  (`rag_reranker.py`)
+
+Retrieval's weakest link: the keyword/embedding retriever puts three keyword-match
+distractors on top and buries the real answer at rank 6. Jev re-scores every
+candidate for relevance in one request, so the right passage rises to rank 1 and
+everything below the relevance bar is dropped before it reaches the LLM.
+
+```
+query: What should I do if my sourdough starter isn't rising?
+BEFORE: real answer at rank 6, behind "sun rising", "interest rates rising", "starter kit"
+AFTER:  real answer at rank 1 (score 2.99); 7 of 8 distractors dropped
 ```
 
 ---
