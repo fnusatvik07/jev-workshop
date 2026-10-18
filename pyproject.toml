@@ -1,11 +1,12 @@
 [project]
 name = "jev-workshop"
 version = "1.0.0"
-description = "Hands-on workshop for Jev, TypeSafe AI's System One model: 5 live notebooks, a 42-slide deck, and a fully cited reference"
+description = "Hands-on workshop for Jev, TypeSafe AI's System One model: 5 live notebooks, 5 resume-ready projects, a 48-slide deck, and a cited reference"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "typesafe-sdk>=0.7.5",
+    "openai>=3.35.0",
     "python-dotenv>=1.0.0",
     "jupyterlab>=4.0.0",
     "ipykernel>=6.29.0",

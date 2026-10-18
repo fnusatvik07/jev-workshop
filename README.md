@@ -83,6 +83,20 @@ It assumes zero background: what a model actually is (knobs and gradient descent
 
 82 verified things people have actually built with Jev in its first month: beating Minecraft's Ender Dragon for under $1, a PostgreSQL extension with plain-English WHERE clauses, an LLM reconstructed out of 521 Jev models, a NAND gate made of API calls, live crypto trading, drone control, and more. Every link was fetched and checked before inclusion, and it ends with a ranked top-5 shortlist for building live in front of a class, each with a 30-45 minute step plan.
 
+### Five resume-ready projects (`live-builds/`)
+
+Five small, original, end-to-end projects, each one file you can read on a projector, each a distinct pattern and a distinct job area. All verified against the live API.
+
+| # | Project | Pattern | Job area |
+| --- | --- | --- | --- |
+| 1 | [`model_router.py`](live-builds/model_router.py) | Jev picks the cheapest capable model, then OpenAI runs it (cut cost ~75%) | LLMOps / cost |
+| 2 | [`tool_firewall.py`](live-builds/tool_firewall.py) | screen every agent tool call before it executes (ALLOW/REVIEW/BLOCK) | AI safety / agents |
+| 3 | [`content_blocker.py`](live-builds/content_blocker.py) | block web content by meaning, not blocklists; toggleable categories | product / full-stack |
+| 4 | [`shapeshift.py`](live-builds/shapeshift.py) | a UI that builds the right input control from natural language | AI UX / frontend |
+| 5 | [`jev_evals.py`](live-builds/jev_evals.py) | LLM-as-judge cheap enough to grade 100% of traffic and catch hallucinations | AI evals / quality |
+
+The through-line: Jev makes the decision, your code owns the action. See [`live-builds/README.md`](live-builds/README.md) for real output and resume lines. Project 1 also needs `OPENAI_API_KEY`.
+
 ### The reference (`reference/JEV-REFERENCE.md`)
 
 A 15,000-word distillation of the complete official docs: every primitive field, every limit, pricing, context windows, the full Python SDK surface, all 20 cookbooks, and 54 numbered best practices. Every fact carries an inline source citation, and the whole thing was adversarially fact-checked against the raw documentation (about 120 spot-checked claims).
