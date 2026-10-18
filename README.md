@@ -79,9 +79,10 @@ That is the whole setup. The notebooks find the key from the environment or any 
 
 It assumes zero background: what a model actually is (knobs and gradient descent), how RLHF really works step by step, why RLVR makes reasoning models, and how RLCD (Jev's recipe) rewards honest probabilities instead. Two audience quiz slides are built in. Rebuild or restyle it with `uv run python build_deck.py` from `deck/build/`.
 
-### The wild-side catalog (`reference/JEV-USE-CASES-WILD.md`)
+### Research: what people built (`reference/`)
 
-82 verified things people have actually built with Jev in its first month: beating Minecraft's Ender Dragon for under $1, a PostgreSQL extension with plain-English WHERE clauses, an LLM reconstructed out of 521 Jev models, a NAND gate made of API calls, live crypto trading, drone control, and more. Every link was fetched and checked before inclusion, and it ends with a ranked top-5 shortlist for building live in front of a class, each with a 30-45 minute step plan.
+- **[TOP-25-USE-CASES.md](reference/TOP-25-USE-CASES.md)** — a skimmable, grouped top-25 with the article link for each (and which ones are built in this repo). Start here.
+- **[JEV-USE-CASES-WILD.md](reference/JEV-USE-CASES-WILD.md)** — the full catalog: 82 verified real-world builds (Ender Dragon under $1, a Postgres plain-English WHERE clause, an "LLM" made of 521 Jev units, a NAND-gate CPU, live crypto trading, drone control), a live-build shortlist with 30-45 minute plans, and a sources section. Every link fetched and checked.
 
 ### Five resume-ready projects (`live-builds/`)
 
