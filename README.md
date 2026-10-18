@@ -6,6 +6,7 @@
   <img src="https://img.shields.io/badge/python-3.11%2B-1F1E1D?style=flat-square&labelColor=F0EEE6&color=5E6B7A" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/install-uv%20sync-D97757?style=flat-square&labelColor=F0EEE6" alt="uv">
   <img src="https://img.shields.io/badge/notebooks-5%2C%20all%20executed%20live-7D8B6A?style=flat-square&labelColor=F0EEE6" alt="notebooks">
+  <img src="https://img.shields.io/badge/walkthroughs-24%20projects%20%2B%20use%20cases-1F7A3D?style=flat-square&labelColor=F0EEE6" alt="walkthroughs">
   <img src="https://img.shields.io/badge/deck-48%20slides%20%2B%20speaker%20notes-BD5D3A?style=flat-square&labelColor=F0EEE6" alt="deck">
   <img src="https://img.shields.io/badge/license-MIT-8A8780?style=flat-square&labelColor=F0EEE6" alt="MIT">
 </p>
@@ -99,19 +100,44 @@ Five small, original, end-to-end projects, each one file you can read on a proje
 
 The through-line: Jev makes the decision, your code owns the action. See [`live-builds/README.md`](live-builds/README.md) for real output and resume lines. Projects 1 (router) needs `OPENAI_API_KEY`.
 
-### Interactive app UIs (`apps/`)
+### 24 walkthrough notebooks with live UIs (`apps/`)
 
-The same nine projects as **runnable UIs inside Jupyter**: type into a box, watch real HTML render (date pickers, sliders, color swatches, relevance-sized emoji, highlighted search, a styled feed, ALLOW/REVIEW/BLOCK badges).
+**24 self-contained, presentable walkthroughs.** All the code sits in visible cells and is explained step by step: the problem, why Jev, the questions, the raw Jev response, the decision logic in plain Python, a run on examples, an HTML/ipywidgets UI you type into, and a recap with exercises. Nothing is hidden behind imports.
 
 <p align="center">
   <img src="docs/images/apps-preview.png" alt="The project UIs rendered in Jupyter" width="80%">
 </p>
 
 ```bash
-uv run jupyter lab apps/     # open a notebook, Run All, then type into "Try it yourself"
+uv run jupyter lab apps/     # or open in VS Code with the .venv kernel; Run All, then "Try it yourself"
 ```
 
-See [`apps/README.md`](apps/README.md). The example cells are pre-run so they show on GitHub; the interactive cells need a live kernel.
+**The original nine:** `01` emoji picker, `02` mood to color, `03` shapeshift UI, `04` content blocker, `05` tool firewall, `06` model router, `07` evals, `08` RAG reranker, `09` semantic Ctrl-F.
+
+**The 18 practical use cases.** Every use case from [*18 practical Jev use cases for AI agents*](https://huggingface.co/blog/karmen-beatapi/18-practical-jev-use-cases-for-ai-agents) is built as a working notebook. Each follows the article's guidance: exact rules first, Jev for the ambiguous part, thresholds in code, and always a "none" or human-review path.
+
+| # | Use case | Notebook | What it shows |
+| --- | --- | --- | --- |
+| 1 | Verify that an agent actually finished | [`10`](apps/10_agent_completion_check.ipynb) | goal + evidence → CLOSE / REVIEW / KEEP OPEN; self-report and stale evidence caught |
+| 2 | Select a tool, then authorize it | [`11`](apps/11_tool_selection.ipynb) | Choice over tools incl. `none`, then permission + required-arg checks in code |
+| 3 | Route to a model, code path or person | [`06`](apps/06_model_router_app.ipynb) | difficulty/kind/stakes → cheapest capable OpenAI model |
+| 4 | Pick a skill or sub-agent | [`12`](apps/12_skill_router.ipynb) | top-1 vs top-2 margin → load one, ask, or plan multi-step |
+| 5 | Confidence gate in a workflow | [`13`](apps/13_confidence_gate.ipynb) | AUTO / CONFIRM / FALLBACK bands with live threshold sliders |
+| 6 | Filter RAG passages before generation | [`14`](apps/14_rag_passage_filter.ipynb) | keep/drop per passage, precision and recall measured against labels |
+| 7 | Rerank a short candidate set | [`08`](apps/08_rag_reranker_app.ipynb) | the right passage jumps from rank 6 to rank 1 |
+| 8 | Check a citation against a claim | [`15`](apps/15_citation_check.ipynb) | supports / contradicts / not addressed, plus an exact quote-in-source check |
+| 9 | Align two entity records | [`16`](apps/16_entity_matching.ipynb) | deterministic blocking first, Jev for the gray zone, false merges counted |
+| 10 | Screen LLM input and output | [`17`](apps/17_llm_io_guard.ipynb) | regex hard rules + one Noul per hazard → PASS / REVIEW / BLOCK |
+| 11 | Apply a fixed evaluation rubric | [`07`](apps/07_jev_evals_app.ipynb) | faithfulness, relevance, completeness; verdict computed in code |
+| 12 | Flag semantic issues in code changes | [`18`](apps/18_code_review_rules.ipynb) | plain-English team rules → review comments, with noise tracking |
+| 13 | Check a document against a checklist | [`19`](apps/19_document_checklist.ipynb) | MET / UNCERTAIN / MISSING plus an audit record |
+| 14 | Triage a support inbox | [`20`](apps/20_support_triage.ipynb) | queue + urgency + escalation in one call, PII redacted first |
+| 15 | Classify within a large taxonomy | [`21`](apps/21_taxonomy_classifier.ipynb) | level-by-level Choice with a beam and a `none_of_these` exit |
+| 16 | Select among extracted candidates | [`22`](apps/22_span_selection.ipynb) | regex finds spans, Jev picks one, value copied verbatim (can't invent) |
+| 17 | Combine several scored dimensions | [`23`](apps/23_multi_score_prioritizer.ipynb) | four rubrics, weights in code, live weight sliders |
+| 18 | Semantic features for a classic ML model | [`24`](apps/24_semantic_features.ipynb) | Jev outputs as features in a NumPy logistic regression, evaluated on held-out data |
+
+Several notebooks include a **Workshop note** describing a wording change that fixed a wrong answer during development. That is part of the lesson: the question text is everything the model sees. See [`apps/README.md`](apps/README.md). Outputs are pre-run so they show on GitHub; the "Try it yourself" boxes need a live kernel. `06` and `09` also need `OPENAI_API_KEY`.
 
 ### A gallery of fun, visual demos (`gallery/`)
 
@@ -181,8 +207,11 @@ Every question is evaluated **in parallel, independently**, in one request. Addi
 ```
 jev-workshop/
 ├── notebooks/            5 executed notebooks (outputs included)
+├── apps/                 24 walkthrough notebooks with live UIs (9 projects + 18 use cases)
+├── live-builds/          the projects as single-file terminal scripts
+├── gallery/              quick visual demos (emoji, color, semantic find)
 ├── deck/
-│   ├── Jev-Workshop.pptx the 42-slide presentation
+│   ├── Jev-Workshop.pptx the 48-slide presentation
 │   ├── assets/           charts + diagrams used by the deck and this README
 │   └── build/            python-pptx build scripts (rebuild/restyle the deck)
 ├── reference/
