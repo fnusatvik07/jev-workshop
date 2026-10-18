@@ -79,6 +79,10 @@ That is the whole setup. The notebooks find the key from the environment or any 
 
 It assumes zero background: what a model actually is (knobs and gradient descent), how RLHF really works step by step, why RLVR makes reasoning models, and how RLCD (Jev's recipe) rewards honest probabilities instead. Two audience quiz slides are built in. Rebuild or restyle it with `uv run python build_deck.py` from `deck/build/`.
 
+### The wild-side catalog (`reference/JEV-USE-CASES-WILD.md`)
+
+82 verified things people have actually built with Jev in its first month: beating Minecraft's Ender Dragon for under $1, a PostgreSQL extension with plain-English WHERE clauses, an LLM reconstructed out of 521 Jev models, a NAND gate made of API calls, live crypto trading, drone control, and more. Every link was fetched and checked before inclusion, and it ends with a ranked top-5 shortlist for building live in front of a class, each with a 30-45 minute step plan.
+
 ### The reference (`reference/JEV-REFERENCE.md`)
 
 A 15,000-word distillation of the complete official docs: every primitive field, every limit, pricing, context windows, the full Python SDK surface, all 20 cookbooks, and 54 numbered best practices. Every fact carries an inline source citation, and the whole thing was adversarially fact-checked against the raw documentation (about 120 spot-checked claims).
